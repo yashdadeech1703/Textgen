@@ -107,4 +107,28 @@ model.fit(X,y,epochs=4,batch_size=256,callbacks=desired_callbacks)
 # recompile model with the saved weights
 filename="model_weights_saved.hdf5"
 model.load_weight(filename)
-model.compile(loss='categorical_crosses
+model.compile(loss='categorical_crossentropy',optimizer='adam')
+
+# output of the model back into characters
+num_to_char=dict((i,c) for i,c in enumerate(chars))
+
+# random seed to help generate
+start=numpy.random.randint(0,len(x_data)-1)
+pattern=x_data(start)
+print("Random Seed:")
+print("\"",''.join([num_to_char[value] for value in pattern]),"\"")
+
+# generate the text
+for i in range(1000):
+    x=numpy.reshape(pattern,(1,len(pattern),1))
+    x=x/float(vocab_len)
+    prediction=model.predict(x,verbose=0)
+    index=numpy.argmax(prediction)
+    result=num_to_char[index]
+    seq_in=[num_to_char[value] for value in pattern]
+    sys.stdout.write(result)
+    pattern.append(index)
+    pattern=pattern[1:len(pattern)]
+    
+
+            
